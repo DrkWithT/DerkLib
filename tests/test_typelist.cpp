@@ -24,7 +24,7 @@ int main() {
         return 1;
     }
 
-    if (auto sample_2_len = sample_2.length(); sample_2_len != 0) {
+    if (auto sample_2_len = sample_2.length(); sample_2_len != 3) {
         std::print("typelist sample_2 had wrong length: {}\n", sample_2_len);
         return 1;
     }
