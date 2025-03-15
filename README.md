@@ -11,3 +11,6 @@ _DerkLib_ is my personal, general-purpose C++ library. I hope to develop this li
 
 ### Documentation (TO-DO)
  - [Meta](#)
+
+### To Do's
+ - Add GitHub Actions workflow for pre-PR C.I!
