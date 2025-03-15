@@ -9,11 +9,6 @@ namespace DerkLib::Meta::TypeList {
     };
 
     namespace Impl {
-        template <typename T>
-        struct type_holder_t {
-            using type = T;
-        };
-
         template <typename... Args>
         struct type_count_t {
             static constexpr auto value = sizeof...(Args);
@@ -101,15 +96,4 @@ namespace DerkLib::Meta::TypeList {
             return std::is_same_v<self_type, other_type>;
         }
     };
-
-    /* Utility Functions */
-
-    template <typename Target, template <typename...> typename Sequence, typename... Args>
-    [[nodiscard]] constexpr int getTypeIndexOf([[maybe_unused]] Sequence<Args...> type_list) noexcept {
-        if constexpr (sizeof...(Args) == 0) {
-            return Impl::implGetTypeIndexOf<0, Target>();
-        }
-
-        return Impl::implGetTypeIndexOf<0, Target, Args...>();
-    }
 }
