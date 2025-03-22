@@ -1,10 +1,3 @@
-add_executable(test_foo)
-target_include_directories(test_foo PUBLIC ${DERKLIB_INCLUDES})
-target_link_directories(test_foo PUBLIC ${DERKLIB_LIBS_DIR})
-target_sources(test_foo PRIVATE test_foo.cpp)
-target_link_libraries(test_foo PRIVATE derklib)
-add_test(NAME test_foo COMMAND "$<TARGET_FILE:test_foo>")
-
 add_executable(test_typelist)
 target_include_directories(test_typelist PUBLIC ${DERKLIB_INCLUDES})
 target_sources(test_typelist PRIVATE test_typelist.cpp)
