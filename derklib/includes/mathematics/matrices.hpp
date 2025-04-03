@@ -4,12 +4,17 @@
 #include <array>
 #include <stdexcept>
 #include <type_traits>
+#include "meta/general.hpp"
+#include "meta/maths.hpp"
 
 namespace DerkLib::Mathematics::Matrices {
     enum class MatrixDefaultingOpt {
         zeroed,
         identity
     };
+
+    template <typename T, std::size_t Rows, std::size_t Cols>
+    class Matrix;
 
     template <typename T, std::size_t Rows, std::size_t Cols>
     class Matrix {
@@ -107,7 +112,30 @@ namespace DerkLib::Mathematics::Matrices {
             return *this;
         }
 
-        /// TODO: add matrix-to-matrix multplication!
+        template <template <typename, std::size_t, std::size_t> typename OtherMat, typename OtherItem, std::size_t OtherRows, std::size_t OtherCols> requires (Meta::Maths::MatrixKind<OtherMat, OtherItem, OtherRows, OtherCols>)
+        [[nodiscard]] auto operator*(const OtherMat<OtherItem, OtherRows, OtherCols> other) noexcept (std::is_nothrow_assignable_v<T, OtherItem>) {
+            if constexpr (not Meta::Maths::AreMatDimsCompatible<Rows, Cols, OtherRows, OtherCols>) {
+                throw std::logic_error {"Invalid dimensions passed for Matrix<T, Rows, Cols>::operator*(Matrix<T2, Rows2, Cols2>)."};
+            }
+
+            using AnsMatrix = Meta::Maths::ProductOfMatrices<Matrix, T, Rows, Cols, Matrix, T, OtherRows, OtherCols>; // Represents mat<A_rows, B_cols> or void!
+
+            const auto self_row_n = static_cast<int>(Rows);
+            const auto other_row_n = static_cast<int>(OtherRows);
+            const auto other_col_n = static_cast<int>(OtherCols);
+
+            AnsMatrix ans;
+
+            for (auto self_row_i = 0; self_row_i < self_row_n; self_row_i++) {
+                for (auto other_col_i = 0; other_col_i < other_col_n; other_col_i++) {
+                    for (auto other_row_i = 0; other_row_i < other_row_n; other_row_i++) {
+                        ans[self_row_i, other_col_i] += m_data[self_row_i][other_row_i] * other[other_row_i, other_col_i];
+                    }
+                }
+            }
+
+            return ans;
+        }
     };
 
     template <typename T>
