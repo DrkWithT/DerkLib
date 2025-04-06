@@ -44,4 +44,24 @@ int main() {
         std::print(std::cerr, "Unexpected mismatch of vec_of_square_2 & vec_to_check!\n");
         return 1;
     }
+
+    /**
+     * @brief Represents 2x1 matrix of:
+     * [[2],[0]]
+     */
+    Matrices::Matrix<int, 2, 1> extra_vec_1 {1};
+    extra_vec_1[1, 0] = 0;
+    extra_vec_1 *= 2;
+
+    Matrices::Matrix<int, 2, 1> expected_vec_2 {0};
+    expected_vec_2[0, 0] = 5;
+    expected_vec_2[1, 0] = 3;
+
+    /// NOTE: represents vector addition of [[3], [3]] += [[2], [0]] = [[5], [3]]...
+    vec_of_square_2 += extra_vec_1;
+
+    if (vec_of_square_2 != expected_vec_2) {
+        std::print(std::cerr, "Unexpected mismatch of vec_of_square_2 & expected_vec_2!\n");
+        return 1;
+    }
 }

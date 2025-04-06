@@ -25,13 +25,11 @@ namespace DerkLib::Mathematics::Matrices {
         std::array<std::array<T, Cols>, Rows> m_data;
 
     public:
-        explicit Matrix(MatrixDefaultingOpt opt = MatrixDefaultingOpt::zeroed) noexcept(std::is_nothrow_assignable_v<T, T>)
+        explicit Matrix(MatrixDefaultingOpt opt = MatrixDefaultingOpt::zeroed, T filler = T {}) noexcept(std::is_nothrow_assignable_v<T, T>)
         : m_data {} {
-            if (opt == MatrixDefaultingOpt::identity) {
-                if constexpr (isSquare()) {
-                    for (auto row_col_i = 0UL; row_col_i < Rows; row_col_i++) {
-                        m_data[row_col_i][row_col_i] = T {};
-                    }
+            if (opt == MatrixDefaultingOpt::identity and Rows == Cols) {
+                for (auto row_col_i = 0UL; row_col_i < Rows; row_col_i++) {
+                    m_data[row_col_i][row_col_i] = filler;
                 }
 
                 return;
@@ -47,8 +45,10 @@ namespace DerkLib::Mathematics::Matrices {
         template <typename T2 = T>
         explicit Matrix(T2&& arg) noexcept(std::is_nothrow_assignable_v<T2, T>)
         : m_data {} {
-            for (auto row_col_i = 0UL; row_col_i < Rows; row_col_i++) {
-                m_data[row_col_i][row_col_i] = arg;
+            for (auto fill_row = 0UL; fill_row < Rows; fill_row++) {
+                for (auto fill_col = 0UL; fill_col < Cols; fill_col++) {
+                    m_data[fill_row][fill_col] = arg;
+                }
             }
         }
 
@@ -99,9 +99,12 @@ namespace DerkLib::Mathematics::Matrices {
             return temp;
         }
 
-        Matrix& operator+(const Matrix<T, Rows, Cols>& rhs) noexcept (std::is_nothrow_assignable_v<T, T>) {
-            for (auto row_idx = 0; row_idx < Rows; row_idx++) {
-                for (auto col_idx = 0; col_idx < Cols; col_idx++) {
+        Matrix& operator+=(const Matrix<T, Rows, Cols>& rhs) noexcept (std::is_nothrow_assignable_v<T, T>) {
+            const auto rows_n = static_cast<int>(Rows);
+            const auto cols_n = static_cast<int>(Cols);
+
+            for (auto row_idx = 0; row_idx < rows_n; row_idx++) {
+                for (auto col_idx = 0; col_idx < cols_n; col_idx++) {
                     m_data[row_idx][col_idx] += rhs[row_idx, col_idx];
                 }
             }
@@ -109,9 +112,12 @@ namespace DerkLib::Mathematics::Matrices {
             return *this;
         }
 
-        Matrix& operator-(const Matrix<T, Rows, Cols>& rhs) noexcept (std::is_nothrow_assignable_v<T, T>) {
-            for (auto row_idx = 0; row_idx < Rows; row_idx++) {
-                for (auto col_idx = 0; col_idx < Cols; col_idx++) {
+        Matrix& operator-=(const Matrix<T, Rows, Cols>& rhs) noexcept (std::is_nothrow_assignable_v<T, T>) {
+            const auto rows_n = static_cast<int>(Rows);
+            const auto cols_n = static_cast<int>(Cols);
+
+            for (auto row_idx = 0; row_idx < rows_n; row_idx++) {
+                for (auto col_idx = 0; col_idx < cols_n; col_idx++) {
                     m_data[row_idx][col_idx] -= rhs[row_idx, col_idx];
                 }
             }
@@ -119,9 +125,12 @@ namespace DerkLib::Mathematics::Matrices {
             return *this;
         }
 
-        Matrix& operator*(T scalar) noexcept (std::is_nothrow_assignable_v<T, T>) {
-            for (auto row_idx = 0; row_idx < Rows; row_idx++) {
-                for (auto col_idx = 0; col_idx < Cols; col_idx++) {
+        Matrix& operator*=(T scalar) noexcept (std::is_nothrow_assignable_v<T, T>) {
+            const auto rows_n = static_cast<int>(Rows);
+            const auto cols_n = static_cast<int>(Cols);
+
+            for (auto row_idx = 0; row_idx < rows_n; row_idx++) {
+                for (auto col_idx = 0; col_idx < cols_n; col_idx++) {
                     m_data[row_idx][col_idx] *= scalar;
                 }
             }
