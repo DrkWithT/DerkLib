@@ -10,6 +10,9 @@ _DerkLib_ is my personal, general-purpose C++ library. I hope to develop this li
  - clangd LSP
 
 ### Documentation (TO-DO)
+ - [Algorithms](#)
+ - [Containers](#)
+ - [Mathematics](#)
  - [Meta](#)
 
 ### To Do's
