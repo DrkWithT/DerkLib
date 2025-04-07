@@ -20,6 +20,11 @@ namespace DerkLib::Containers::Graph {
     template <PathPolicy P, typename T>
     class Graph {};
 
+    /**
+     * @brief This is a `Graph` specialization for an unweighted graph.
+     * 
+     * @tparam T 
+     */
     template <typename T>
     class Graph <PathPolicy::unweighted, T> {
     public:
@@ -125,6 +130,11 @@ namespace DerkLib::Containers::Graph {
         }
     };
 
+    /**
+     * @brief This is a weighted graph specialization of `Graph`.
+     * 
+     * @tparam T 
+     */
     template <typename T>
     class Graph <PathPolicy::weighted, T> {
     public:

@@ -13,7 +13,7 @@ namespace DerkLib::Mathematics::Matrices {
     };
 
     /**
-     * @brief Represents an NxM matrix where `N` is rows & `M` is cols.
+     * @brief Represents an NxM matrix where `N` is rows & `M` is cols. The basic arithmetic operations of addition, subtraction, and multiplication are provided. Finally, this class has a `chop` method that slices off a sub-matrix starting at a position if positioning & bounds are valid.
      * 
      * @tparam T 
      * @tparam Rows 
@@ -123,7 +123,7 @@ namespace DerkLib::Mathematics::Matrices {
             return *this;
         }
 
-        Matrix& operator*=(T scalar) noexcept (std::is_nothrow_assignable_v<T, T>) {
+        Matrix& operator*=(const T& scalar) noexcept (std::is_nothrow_assignable_v<T, T>) {
             const auto rows_n = static_cast<int>(Rows);
             const auto cols_n = static_cast<int>(Cols);
 
@@ -137,7 +137,7 @@ namespace DerkLib::Mathematics::Matrices {
         }
 
         template <template <typename, std::size_t, std::size_t> typename OtherMat, typename OtherItem, std::size_t OtherRows, std::size_t OtherCols> requires (Meta::Maths::MatrixKind<OtherMat, OtherItem, OtherRows, OtherCols>)
-        [[nodiscard]] auto operator*(const OtherMat<OtherItem, OtherRows, OtherCols> other) noexcept (std::is_nothrow_assignable_v<T, OtherItem>) -> Meta::Maths::ProductOfMatrices<Matrix, T, Rows, Cols, OtherMat, OtherItem, OtherRows, OtherCols> {
+        [[nodiscard]] auto operator*(const OtherMat<OtherItem, OtherRows, OtherCols>& other) noexcept (std::is_nothrow_assignable_v<T, OtherItem>) -> Meta::Maths::ProductOfMatrices<Matrix, T, Rows, Cols, OtherMat, OtherItem, OtherRows, OtherCols> {
             if constexpr (not Meta::Maths::AreMatDimsCompatible<Rows, Cols, OtherRows, OtherCols>) {
                 throw std::logic_error {"Invalid dimensions passed for Matrix<T, Rows, Cols>::operator*(Matrix<T2, Rows2, Cols2>)."};
             }
