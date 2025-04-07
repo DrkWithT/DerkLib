@@ -27,18 +27,16 @@ namespace DerkLib::Mathematics::Matrices {
     public:
         explicit Matrix(MatrixDefaultingOpt opt = MatrixDefaultingOpt::zeroed, T filler = T {}) noexcept(std::is_nothrow_assignable_v<T, T>)
         : m_data {} {
-            if (opt == MatrixDefaultingOpt::identity and Rows == Cols) {
-                for (auto row_col_i = 0UL; row_col_i < Rows; row_col_i++) {
-                    m_data[row_col_i][row_col_i] = filler;
-                }
+            for (auto& row : m_data) {
+                std::fill(row.begin(), row.end(), T {});
+            }
 
+            if (opt != MatrixDefaultingOpt::identity or Rows != Cols) {
                 return;
             }
 
-            if (opt == MatrixDefaultingOpt::zeroed) {
-                for (auto& row : m_data) {
-                    std::fill(row.begin(), row.end(), T {});
-                }
+            for (auto row_col_i = 0UL; row_col_i < Rows; row_col_i++) {
+                m_data[row_col_i][row_col_i] = filler;
             }
         }
 
@@ -163,18 +161,13 @@ namespace DerkLib::Mathematics::Matrices {
             return ans;
         }
 
-        template <template <typename, std::size_t, std::size_t> typename OtherMat, typename OtherT, std::size_t OtherRows, std::size_t OtherCols>
-        constexpr bool operator==(const OtherMat<OtherT, OtherRows, OtherCols> other) const noexcept {
+        constexpr bool operator==(const Matrix& other) const noexcept {
             if (&other == this) {
                 return true;
             }
 
-            if (Rows != OtherRows or Cols != OtherCols) {
-                return false;
-            }
-
-            const auto rows_n = static_cast<int>(OtherRows);
-            const auto cols_n = static_cast<int>(OtherCols);
+            const auto rows_n = static_cast<int>(Rows);
+            const auto cols_n = static_cast<int>(Cols);
 
             for (auto cmp_row_idx = 0; cmp_row_idx < rows_n; cmp_row_idx++) {
                 for (auto cmp_col_idx = 0; cmp_col_idx < cols_n; cmp_col_idx++) {

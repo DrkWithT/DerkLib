@@ -7,10 +7,10 @@ namespace DerkLib::Meta::Maths {
     template <template <typename, std::size_t, std::size_t> typename M, typename T, std::size_t Rows, std::size_t Cols>
     concept MatrixKind = requires (M<T, Rows, Cols> arg) {
         {arg.area()} -> std::same_as<std::size_t>;
-        {arg.area()} -> std::same_as<bool>;
+        {arg.isSquare()} -> std::same_as<bool>;
         {arg[0, 0]} -> std::same_as<T&>;
         {arg.at(0, 0)} -> std::same_as<T&>;
-        {arg.chop()};
+        {arg.template chop<0, 0, Rows, Cols>()};
     };
 
     template <std::size_t ARows, std::size_t ACols, std::size_t BRows, std::size_t BCols>
@@ -35,7 +35,7 @@ namespace DerkLib::Meta::Maths {
      */
     template <template <typename, std::size_t, std::size_t> typename A, typename AItem, std::size_t ARows, std::size_t ACols, template <typename, std::size_t, std::size_t> typename B, typename BItem, std::size_t BRows, std::size_t BCols>
     struct deduce_matrix_product_t {
-        using type = General::choose_type_t<AreMatDimsCompatible<ARows, ACols, BRows, BCols>, A<AItem, ARows, BCols>, void>;
+        using type = General::choose_type_t<AreMatDimsCompatible<ARows, ACols, BRows, BCols>, A<AItem, ARows, BCols>, void>::type;
     };
 
     /**
@@ -51,5 +51,5 @@ namespace DerkLib::Meta::Maths {
      * @tparam `BCols`
      */
     template <template <typename, std::size_t, std::size_t> typename A, typename AItem, std::size_t ARows, std::size_t ACols, template <typename, std::size_t, std::size_t> typename B, typename BItem, std::size_t BRows, std::size_t BCols>
-    using ProductOfMatrices = typename deduce_matrix_product_t<A, AItem, ARows, ACols, B, BItem, BRows, BCols>::type;
+    using ProductOfMatrices = deduce_matrix_product_t<A, AItem, ARows, ACols, B, BItem, BRows, BCols>::type;
 }

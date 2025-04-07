@@ -64,4 +64,25 @@ int main() {
         std::print(std::cerr, "Unexpected mismatch of vec_of_square_2 & expected_vec_2!\n");
         return 1;
     }
+
+    /**
+     * @brief Represents a 2x2 transform matrix of 2I.
+     */
+    Matrices::Matrix<int, 2, 2> transform_double {Matrices::MatrixDefaultingOpt::identity, 2};
+
+    /**
+     * @brief Represents a 2x1 vector of [[1], [-1]].
+     */
+    Matrices::Matrix<int, 2, 1> transforming_vec {};
+    transforming_vec[0, 0] = 1;
+    transforming_vec[1, 0] = -1;
+
+    Matrices::Matrix<int, 2, 1> expected_transform_ans;
+    expected_transform_ans[0, 0] = 2;
+    expected_transform_ans[1, 0] = -2;
+
+    if (const auto new_vec_ans = transform_double * transforming_vec; new_vec_ans != expected_transform_ans) {
+        std::print(std::cerr, "Unexpected mismatch between new_vec_ans & expected_transform_ans!\n");
+        return 1;
+    }
 }
