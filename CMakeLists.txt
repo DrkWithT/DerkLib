@@ -12,6 +12,6 @@ else ()
 endif ()
 
 enable_testing()
-add_subdirectory(derklib)
+# add_subdirectory(derklib)
 # add_subdirectory(samples)
 add_subdirectory(tests)
